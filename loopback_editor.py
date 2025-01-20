@@ -19,7 +19,23 @@ MODEL_TEMPLATE = {
     "methods": {}
 }
 
-JS_TEMPLATE = "'use strict';\n\nmodule.exports = function({modelName}) { \n    // Nombre del modelo: {modelName}\n};\n"
+JS_TEMPLATE = "'use strict';\n\
+module.exports = function({modelName}) { \n\
+    // Nombre del modelo: {modelName}\n\
+    {modelName}.CreateOne = function(modelData, callback) {\n\
+        {modelName}.findOrCreate(\n\
+            {\n\
+                where: { id: modelData.id }\n\
+            },\n\
+            modelData,\n\
+            (err, newModelData) => {\n\
+                if (err) return callback(err);\n\
+                return callback(null, newModelData);\n\
+            }\n\
+        );\n\
+    };\n\
+};\n"
+
 
 
 
